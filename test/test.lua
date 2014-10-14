@@ -26,8 +26,8 @@ local meta = {__eq = utils.equal, __tostring = utils.tableString}
 utils.setMetatableRecursively(export, meta)
 utils.setMetatableRecursively(newTable, meta)
 if newTable == export then
-  print("SDP -> table tests pass")
+    print("SDP -> table tests pass")
 else
-  print("Something went wrong with SDP -> table")
+    print("Something went wrong with SDP -> table")
 end
 -- End SDP -> table
