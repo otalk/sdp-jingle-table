@@ -1,3 +1,4 @@
+local utils = require "utils"
 local M = {}
 
 local senders = {
@@ -10,15 +11,6 @@ local senders = {
     sendrecv = "both",
     inactive = "none"
 }
-
-function tableHasContent(T)
-    local hasContent = false
-    for _ in pairs(T) do
-        hasContent = true
-        break
-    end
-    return hasContent
-end
 
 function M.toSessionSDP(session, sid, time)
     local sdp = {
@@ -62,7 +54,7 @@ function M.toMediaSDP(content)
     else
         table.insert(mline, desc.media)
         table.insert(mline, "1")
-        if desc.encryption and tableHasContent(desc.encryption) or tableHasContent(fingerprints) then
+        if desc.encryption and utils.tableHasContent(desc.encryption) or tableHasContent(fingerprints) then
             table.insert(mline, "RTP/SAVPF")
         else
             table.insert(mline, "RTP/AVPF")
@@ -126,7 +118,7 @@ function M.toMediaSDP(content)
         end
         table.insert(sdp, rtpmap)
 
-        if payload.parameters and tableHasContent(payload.parameters) then
+        if payload.parameters and utils.tableHasContent(payload.parameters) then
             local fmtp = {"a=fmtp:" .. payload.id}
             local parameters = {}
             for _, param in pairs(payload.parameters) do
