@@ -54,7 +54,7 @@ function M.toMediaSDP(content)
     else
         table.insert(mline, desc.media)
         table.insert(mline, "1")
-        if desc.encryption and utils.tableHasContent(desc.encryption) or tableHasContent(fingerprints) then
+        if desc.encryption and utils.tableHasContent(desc.encryption) or utils.tableHasContent(fingerprints) then
             table.insert(mline, "RTP/SAVPF")
         else
             table.insert(mline, "RTP/AVPF")
@@ -92,7 +92,7 @@ function M.toMediaSDP(content)
 
         if transport.sctp then
             for _, map in pairs(transport.sctp) do
-                table.insert(sdp, "a=sctpmap:" .. map.number .. " " .. map.protocol .. " " .. map.stream)
+                table.insert(sdp, "a=sctpmap:" .. map.number .. " " .. map.protocol .. " " .. map.streams)
             end
         end
     end
@@ -151,7 +151,7 @@ function M.toMediaSDP(content)
 
     local hdrExts = desc.headerExtensions or {}
     for _, hdr in pairs(hdrExts) do
-        table.insert(sdp, "a=extmap:" .. hdr.id .. (hdr.senders and ("/" .. senders[hdr.senders]) or "") .. " " .. hdr.uri)
+        table.insert(sdp, "a=extmap:" .. hdr.id .. ((string.len(hdr.senders) > 0) and ("/" .. senders[hdr.senders]) or "") .. " " .. hdr.uri)
     end
 
     local ssrcGroups = desc.sourceGroups or {}

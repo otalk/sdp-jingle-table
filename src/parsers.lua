@@ -176,7 +176,7 @@ function M.candidate(line)
         generation = "0"
     }
 
-    for i=8,#parts,2 do
+    for i=9,#parts,2 do
         if parts[i] == "raddr" then
             candidate.relAddr = parts[i + 1]
         elseif parts[i] == "rport" then

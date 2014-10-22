@@ -176,7 +176,7 @@ function M.toMediaTable(media, session, creator)
     end
 
     if desc.descType == "datachannel" then
-        local sctpmapLines = parsers.fineLines("a=sctpmap:", lines)
+        local sctpmapLines = parsers.findLines("a=sctpmap:", lines)
         for _, line in pairs(sctpmapLines) do
             local sctp = parsers.sctpmap(line)
             table.insert(trans.sctp, sctp)
