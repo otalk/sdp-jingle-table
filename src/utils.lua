@@ -121,6 +121,13 @@ function M.subTable(t, i, j)
         table.insert(sub, t[k])
     end
     return sub
+end
+
+function M.appendTable(t1, t2)
+    for _, value in pairs(t2) do
+        table.insert(t1, value)
+    end
+    return t1
 end  
 
 return M
