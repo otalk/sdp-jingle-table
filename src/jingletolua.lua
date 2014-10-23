@@ -36,14 +36,14 @@ end
 
 function M.toSDP(jingle)
     local toSDP = require "toSDP"
-    local jingleTable = converter.toTable(jingle)
+    local toTable = converter.toTable("jingle", "urn:xmpp:jingle:1")
+    local jingleTable = toTable(jingle)
     return toSDP.toSessionSDP(jingleTable), jingleTable
 end
 
 function M.toJingle(sdp, role)
     local toTable = require "toTable"
     local jingleTable = toTable.toSessionTable(sdp, role)
-    return converter.toStanza(jingleTable), jingleTable
+    local toStanza = converter.toStanza("jingle", "urn:xmpp:jingle:1")
+    return toStanza(jingleTable), jingleTable
 end
-
-return M
