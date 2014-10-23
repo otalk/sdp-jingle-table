@@ -37,13 +37,13 @@ end
 function M.toSDP(jingle)
     local toSDP = require "toSDP"
     local jingleTable = converter.toTable(jingle)
-    return toSDP.toSessionSDP(jingleTable)
+    return toSDP.toSessionSDP(jingleTable), jingleTable
 end
 
 function M.toJingle(sdp, role)
     local toTable = require "toTable"
     local jingleTable = toTable.toSessionTable(sdp, role)
-    return converter.toStanza(jingleTable)
+    return converter.toStanza(jingleTable), jingleTable
 end
 
 return M
