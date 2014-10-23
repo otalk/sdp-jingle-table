@@ -54,5 +54,14 @@ function testXML()
     print(sdp_str1);
 end
 
-testXML();
+function testSDP()
+    print "SDP -> XML"
+    io.input("testXML/sdp.txt")
+    local sdp = io.read("*all")
+    print(sdp)
+    local jingleStanza = jingletolua.toJingle(sdp, "initiator")
+    print(jingleStanza)
+end
 
+testXML();
+testSDP();
