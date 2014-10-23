@@ -7,7 +7,7 @@ local converter = require "converter"
 -- convert.init()
 -- convert.toSDP(jingle)
 
-M.init = function()
+function M.init()
     local jingle = require "jingle"
     jingle.registerJingle(converter)
     jingle.registerContent(converter)
@@ -47,3 +47,5 @@ function M.toJingle(sdp, role)
     local toStanza = converter.toStanza("jingle", "urn:xmpp:jingle:1")
     return toStanza(jingleTable), jingleTable
 end
+
+return M
