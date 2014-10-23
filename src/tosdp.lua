@@ -195,7 +195,7 @@ function M.toCandidateSDP(candidate)
             table.insert(sdp, candidate.relPort)
         end
     end
-    if candidate.tcpType then
+    if candidate.tcpType and string.upper(candidate.protocol) == "TCP" then
         table.insert(sdp, "tcptype")
         table.insert(sdp, candidate.tcpType)
     end
