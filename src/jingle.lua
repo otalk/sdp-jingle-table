@@ -43,7 +43,7 @@ function contentToTable(element)
     content.name = helpers.getAttribute(element, "name")
     content.senders = helpers.getAttribute(element, "senders", "both")
 
-    for child in element:childtags() do
+    for child in helpers.childtags(element) do
         if child.name == "description" then
             local toTable
             if child.attr.xmlns and child.attr.xmlns == "http://talky.io/ns/datachannel" then

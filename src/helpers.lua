@@ -32,7 +32,8 @@ function M.childtags(element, name, xmlns)
             and ((not xmlns and element.attr.xmlns == v.attr.xmlns)
                 or v.attr.xmlns == xmlns
                 or (xmlns and not v.attr.xmlns and element.attr.xmlns == xmlns) -- Added this condition so default namespace on element will match
-                or (xmlns and not v.attr.xmlns and not element.attr.xmlns)) then -- Added so default namespace two levels deep will match - absolutely horrible way to handle this
+                or (xmlns and not v.attr.xmlns and not element.attr.xmlns) -- Added so default namespace two levels deep will match - absolutely horrible way to handle this
+                or (not xmlns)) then -- Added so all children can be returned if no name or xmlns was given
                 start_i = i+1;
                 return v;
             end
