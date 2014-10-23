@@ -1,37 +1,49 @@
-local M = {};
+local M = {}
 
-M.init = function() {
-  local converter = require "converter"
-  local utils = require "utils"
+local converter = require "converter"
 
-  require "jingleStanza"
-  local iqStanza = jingleStanza()
+-- Usage:
+-- local convert = require "jingletolua"
+-- convert.init()
+-- convert.toSDP(jingle)
 
-  local jingle = require "jingle"
-  jingle.registerJingle(converter)
-  jingle.registerContent(converter)
+M.init = function()
+    local jingle = require "jingle"
+    jingle.registerJingle(converter)
+    jingle.registerContent(converter)
 
-  local ice = require "ice"
-  ice.registerTransport(converter)
-  ice.registerCandidate(converter)
-  ice.registerFingerprint(converter)
-  ice.registerSCTP(converter)
+    local ice = require "ice"
+    ice.registerTransport(converter)
+    ice.registerCandidate(converter)
+    ice.registerFingerprint(converter)
+    ice.registerSCTP(converter)
 
-  local rtp = require "rtp"
-  rtp.registerDescription(converter)
-  rtp.registerPayload(converter)
-  rtp.registerFeedback(converter)
-  rtp.registerMoreFeedback(converter)
-  rtp.registerHeader(converter)
-  rtp.registerParameter(converter)
-  rtp.registerTalkyDescription(converter)
-  rtp.registerContentGroup(converter)
-  rtp.registerSourceGroup(converter)
-  rtp.registerSource(converter)
-  rtp.registerSourceParameter(converter)
-  rtp.registerMute(converter)
-  rtp.registerUnmute(converter)
-  return converter;
-}
+    local rtp = require "rtp"
+    rtp.registerDescription(converter)
+    rtp.registerPayload(converter)
+    rtp.registerFeedback(converter)
+    rtp.registerMoreFeedback(converter)
+    rtp.registerHeader(converter)
+    rtp.registerParameter(converter)
+    rtp.registerTalkyDescription(converter)
+    rtp.registerContentGroup(converter)
+    rtp.registerSourceGroup(converter)
+    rtp.registerSource(converter)
+    rtp.registerSourceParameter(converter)
+    rtp.registerMute(converter)
+    rtp.registerUnmute(converter)
+end
 
-return M;
+function M.toSDP(jingle)
+    local toSDP = require "toSDP"
+    local jingleTable = converter.toTable(jingle)
+    return toSDP.toSessionSDP(jingleTable)
+end
+
+function M.toJingle(sdp, role)
+    local toTable = require "toTable"
+    local jingleTable = toTable.toSessionTable(sdp, role)
+    return converter.toStanza(jingleTable)
+end
+
+return M
