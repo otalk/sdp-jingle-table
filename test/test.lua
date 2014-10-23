@@ -2,6 +2,11 @@ package.path = '../src/?.lua;' .. package.path
 
 local utils = require "utils"
 
+function dofile (filename)
+    local f = assert(loadfile(filename))
+    return f()
+end
+
 require "tableData"
 io.input("sdpData.txt")
 local sdp = io.read("*all")
@@ -31,3 +36,23 @@ else
     print("Something went wrong with SDP -> table")
 end
 -- End SDP -> table
+local xmlns_jingle = "urn:xmpp:jingle:1";
+local jingletolua = require("jingletolua");
+local xml = require("pxml");
+jingletolua.init();
+
+function testXML()
+    print "XML -> SDP";
+    --local jingle_file1 = dofile("testXML/jingle.xml");
+    io.input("testXML/jingle.xml");
+    local jingle_file1 = io.read("*all");
+    local iq1 = xml.parse(jingle_file1)
+    --print(jingle_file1);
+    print(iq1);
+    local jingle1 = iq1:get_child('jingle', xmlns_jingle);
+    local sdp_str1 = jingletolua.toSDP(jingle1);
+    print(sdp_str1);
+end
+
+testXML();
+
