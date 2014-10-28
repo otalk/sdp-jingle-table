@@ -166,7 +166,7 @@ function M.toMediaSDP(content)
         end
     end
 
-    local candidates = transport.candidates or {}
+    local candidates = (transport and transport.candidates) or {}
     for _, candidate in pairs(candidates) do
         table.insert(sdp, M.toCandidateSDP(candidate))
     end
