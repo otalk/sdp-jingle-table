@@ -272,7 +272,7 @@ end
 function tableToSourceParameter(parameter)
     local element = stanza.stanza("parameter")
     helpers.setAttributes(element, { xmlns = SSMANS, name = parameter.key, value = parameter.value })
-    return parameter;
+    return element
 end
 
 function muteToTable(element)

@@ -113,7 +113,7 @@ function M.toMediaSDP(content)
 
     for _, payload in pairs(payloads) do
         local rtpmap = "a=rtpmap:" .. payload.id .. " " .. payload.name .. "/" .. payload.clockrate
-        if payload.channels and payload.channels ~= "1" then
+        if payload.channels and string.len(payload.channels) > 0 and payload.channels ~= "1" then
             rtpmap = rtpmap .. "/" .. payload.channels
         end
         table.insert(sdp, rtpmap)
