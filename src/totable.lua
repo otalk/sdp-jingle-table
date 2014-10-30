@@ -79,9 +79,9 @@ function M.toMediaTable(media, session, creator)
     if parsers.findLine("a=sendrecv", lines, sessionLines) then
         content.senders = "both"
     elseif parsers.findLine("a=sendonly", lines, sessionLines) then
-        content.senders = "initiator"
+        content.senders = "both"
     elseif parsers.findLine("a=recvonly", lines, sessionLines) then
-        content.senders = "responder"
+        content.senders = "both"
     elseif parsers.findLine("a=inactive", lines, sessionLines) then
         content.senders = "none"
     end
@@ -134,8 +134,8 @@ function M.toMediaTable(media, session, creator)
             local ext = parsers.extmap(line)
 
             local senders = {
-                sendonly = "responder",
-                recvonly = "initiator",
+                sendonly = "both",
+                recvonly = "both",
                 sendrecv = "both",
                 inactive = "none"
             }

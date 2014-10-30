@@ -2,12 +2,12 @@ local utils = require "utils"
 local M = {}
 
 local senders = {
-    initiator = "sendonly",
-    responder = "recvonly",
+    initiator = "sendrecv",
+    responder = "sendrecv",
     both = "sendrecv",
     none = "inactive",
-    sendonly = "initator",
-    recvonly = "responder",
+    sendonly = "both",
+    recvonly = "both",
     sendrecv = "both",
     inactive = "none"
 }
