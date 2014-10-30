@@ -77,16 +77,20 @@ function tableToContent(content)
     helpers.setAttributes(element, attrs)
 
     local description = content.description
-    local toStanza
-    if description.descType == "datachannel" then
-        toStanza = converter.toStanza("description", "http://talky.io/ns/datachannel")
-    else
-        toStanza = converter.toStanza("description", "urn:xmpp:jingle:apps:rtp:1")
+    if description then
+        local toStanza
+        if description.descType == "datachannel" then
+            toStanza = converter.toStanza("description", "http://talky.io/ns/datachannel")
+        else
+            toStanza = converter.toStanza("description", "urn:xmpp:jingle:apps:rtp:1")
+        end
+        element:add_child(toStanza(description))
     end
-    element:add_child(toStanza(description))
 
-    toStanza = converter.toStanza("transport", "urn:xmpp:jingle:transports:ice-udp:1")
-    element:add_child(toStanza(content.transport))
+    if content.transport then
+        toStanza = converter.toStanza("transport", "urn:xmpp:jingle:transports:ice-udp:1")
+        element:add_child(toStanza(content.transport))
+    end
 
     return element
 end

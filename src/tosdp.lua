@@ -36,7 +36,7 @@ end
 function M.toMediaSDP(content)
     local sdp = {}
 
-    local desc = content.description
+    local desc = content.description or {}
     local transport = content.transport
     local payloads = desc.payloads or {}
     local fingerprints = (transport and transport.fingerprints) or {}

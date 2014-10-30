@@ -7,6 +7,9 @@ local converter = require "converter"
 -- convert.init()
 -- convert.toSDP(jingle)
 
+local toSDP = require "toSDP"
+local toTable = require "toTable"
+
 function M.init()
     local jingle = require "jingle"
     jingle.registerJingle(converter)
@@ -35,17 +38,28 @@ function M.init()
 end
 
 function M.toSDP(jingle)
-    local toSDP = require "toSDP"
     local toTable = converter.toTable("jingle", "urn:xmpp:jingle:1")
     local jingleTable = toTable(jingle)
     return toSDP.toSessionSDP(jingleTable), jingleTable
 end
 
 function M.toJingle(sdp, role)
-    local toTable = require "toTable"
     local jingleTable = toTable.toSessionTable(sdp, role)
     local toStanza = converter.toStanza("jingle", "urn:xmpp:jingle:1")
     return toStanza(jingleTable), jingleTable
+end
+
+function M.toCandidateSDP(candidate)
+    return toSDP.toCandidateSDP(candidate)
+end
+
+function M.toCandidateTable(sdp)
+    return toTable.toCandidateTable(sdp)
+end
+
+function M.toStanza(jingleTable)
+    local toStanza = converter.toStanza("jingle", "urn:xmpp:jingle:1")
+    return toStanza(jingleTable)
 end
 
 return M
