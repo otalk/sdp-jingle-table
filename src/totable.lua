@@ -1,5 +1,6 @@
 local parsers = require "parsers"
 local utils = require "utils"
+local SENDERS = require "senders"
 
 local M = {}
 
@@ -10,7 +11,11 @@ function M._setIdCounter(counter)
     idCounter = counter
 end
 
-function M.toSessionTable(sdp, creator)
+function M.toSessionTable(sdp, opts)
+    local creator = opts.creator or "initiator"
+    local role = opts.role or "initiator"
+    local direction = opts.direction or "outgoing"
+
     -- Divide the SDP into session and media sections
     local media = utils.split(sdp, "\r\nm=")
     for i=2,#media do
@@ -25,7 +30,7 @@ function M.toSessionTable(sdp, creator)
 
     local contents = {}
     for _, m in pairs(media) do
-        table.insert(contents, M.toMediaTable(m, session, creator))
+        table.insert(contents, M.toMediaTable(m, session, opts))
     end
     parsed.contents = contents
 
@@ -37,7 +42,11 @@ function M.toSessionTable(sdp, creator)
     return parsed
 end
 
-function M.toMediaTable(media, session, creator)
+function M.toMediaTable(media, session, opts)
+    local creator = opts.creator or "initiator"
+    local role = opts.role or "initiator"
+    local direction = opts.direction or "outgoing"
+
     local lines = parsers.lines(media)
     local sessionLines = parsers.lines(session)
     local mline = parsers.mline(lines[1])
@@ -79,9 +88,9 @@ function M.toMediaTable(media, session, creator)
     if parsers.findLine("a=sendrecv", lines, sessionLines) then
         content.senders = "both"
     elseif parsers.findLine("a=sendonly", lines, sessionLines) then
-        content.senders = "both"
+        content.senders = SENDERS[role][direction].sendonly
     elseif parsers.findLine("a=recvonly", lines, sessionLines) then
-        content.senders = "both"
+        content.senders = SENDERS[role][direction].recvonly
     elseif parsers.findLine("a=inactive", lines, sessionLines) then
         content.senders = "none"
     end
@@ -133,13 +142,7 @@ function M.toMediaTable(media, session, creator)
         for _, line in pairs(extLines) do
             local ext = parsers.extmap(line)
 
-            local senders = {
-                sendonly = "both",
-                recvonly = "both",
-                sendrecv = "both",
-                inactive = "none"
-            }
-            ext.senders = senders[ext.senders]
+            ext.senders = SENDERS[role][direction][ext.senders]
 
             table.insert(desc.headerExtensions, ext)
         end

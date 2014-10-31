@@ -13,7 +13,12 @@ local sdp = io.read("*all")
 
 -- Test table -> SDP
 local toSDP = require "tosdp"
-local newSDP = toSDP.toSessionSDP(export, 1382398245712, 1385147470924)
+local newSDP = toSDP.toSessionSDP(export, {
+    role = "initiator",
+    direction = "outgoing",
+    sid = 1382398245712,
+    time = 1385147470924
+})
 
 if newSDP == sdp then
     print("Table -> SDP tests pass")
@@ -25,7 +30,11 @@ end
 -- Test SDP -> table
 local toTable = require "toTable"
 toTable._setIdCounter(0)
-local newTable = toTable.toSessionTable(sdp, "initiator")
+local newTable = toTable.toSessionTable(sdp, {
+    creator = "initiator",
+    role = "initiator",
+    direction = "outgoing"
+})
 
 local meta = {__eq = utils.equal, __tostring = utils.tableString}
 utils.setMetatableRecursively(export, meta)
@@ -50,7 +59,7 @@ function testXML()
     --print(jingle_file1);
     print(iq1);
     local jingle1 = iq1:get_child('jingle', xmlns_jingle);
-    local sdp_str1 = jingletolua.toSDP(jingle1);
+    local sdp_str1 = jingletolua.toIncomingOfferSDP(jingle1);
     print(sdp_str1);
 end
 
@@ -59,7 +68,8 @@ function testSDP()
     io.input("testXML/sdp.txt")
     local sdp = io.read("*all")
     print(sdp)
-    local jingleStanza = jingletolua.toJingle(sdp, "initiator")
+    local jingleTable = jingletolua.toIncomingTableOffer(sdp, "initiator")
+    local jingleStanza = jingletolua.toJingle(jingleTable)
     print(jingleStanza)
 end
 

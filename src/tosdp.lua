@@ -1,21 +1,17 @@
 local utils = require "utils"
+local SENDERS = require "senders"
+
 local M = {}
 
-local senders = {
-    initiator = "sendrecv",
-    responder = "sendrecv",
-    both = "sendrecv",
-    none = "inactive",
-    sendonly = "both",
-    recvonly = "both",
-    sendrecv = "both",
-    inactive = "none"
-}
+function M.toSessionSDP(session, opts)
+    local role = opts.role or "initiator"
+    local direction = opts.direction or "outgoing"
+    local sid = opts.sid or session.sid or os.time()
+    local time = opts.time or os.time()
 
-function M.toSessionSDP(session, sid, time)
     local sdp = {
         "v=0",
-        "o=- " .. (sid or session.sid or os.time()) .. " " .. (time or os.time()) .. " IN IP4 0.0.0.0",
+        "o=- " .. sid .. " " .. time .. " IN IP4 0.0.0.0",
         's=-',
         't=0 0'
         }
@@ -27,14 +23,17 @@ function M.toSessionSDP(session, sid, time)
 
     local contents = session.contents or {}
     for _, content in ipairs(contents) do
-        table.insert(sdp, M.toMediaSDP(content))
+        table.insert(sdp, M.toMediaSDP(content, opts))
     end
 
     return table.concat(sdp, "\r\n") .. "\r\n"
 end
 
-function M.toMediaSDP(content)
+function M.toMediaSDP(content, opts)
     local sdp = {}
+
+    local role = opts.role or "initiator"
+    local direction = opts.direction or "outgoing"
 
     local desc = content.description or {}
     local transport = content.transport
@@ -98,7 +97,7 @@ function M.toMediaSDP(content)
     end
 
     if desc.descType == "rtp" then
-        table.insert(sdp, "a=" .. (senders[content.senders] or "sendrecv"))
+        table.insert(sdp, "a=" .. (SENDERS[role][direction][content.senders] or "sendrecv"))
     end
     table.insert(sdp, "a=mid:" .. content.name)
 
@@ -151,7 +150,7 @@ function M.toMediaSDP(content)
 
     local hdrExts = desc.headerExtensions or {}
     for _, hdr in pairs(hdrExts) do
-        table.insert(sdp, "a=extmap:" .. hdr.id .. ((string.len(hdr.senders) > 0) and ("/" .. senders[hdr.senders]) or "") .. " " .. hdr.uri)
+        table.insert(sdp, "a=extmap:" .. hdr.id .. ((string.len(hdr.senders) > 0) and ("/" .. SENDERS[role][direction][hdr.senders]) or "") .. " " .. hdr.uri)
     end
 
     local ssrcGroups = desc.sourceGroups or {}
