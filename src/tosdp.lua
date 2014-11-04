@@ -4,6 +4,7 @@ local SENDERS = require "senders"
 local M = {}
 
 function M.toSessionSDP(session, opts)
+    opts = opts or {}
     local role = opts.role or "initiator"
     local direction = opts.direction or "outgoing"
     local sid = opts.sid or session.sid or os.time()
@@ -32,6 +33,7 @@ end
 function M.toMediaSDP(content, opts)
     local sdp = {}
 
+    opts = opts or {}
     local role = opts.role or "initiator"
     local direction = opts.direction or "outgoing"
 

@@ -72,6 +72,11 @@ function M.toSDP(jingle)
     return toSDP.toSessionSDP(jingleTable), jingleTable
 end
 
+function M.jingleToTable(jingle)
+    local toTable = converter.toTable("jingle", "urn:xmpp:jingle:1")
+    return toTable(jingle)
+end
+
 M.toCandidateSDP = toSDP.toCandidateSDP
 M.toCandidateTable = toTable.toCandidateTable
 
