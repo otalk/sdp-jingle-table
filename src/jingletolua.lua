@@ -7,8 +7,8 @@ local converter = require "converter"
 -- convert.init()
 -- convert.toSDP(jingle)
 
-local toSDP = require "toSDP"
-local toTable = require "toTable"
+local toSDP = require "tosdp"
+local toTable = require "totable"
 
 function M.init()
     local jingle = require "jingle"
