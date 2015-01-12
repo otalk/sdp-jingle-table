@@ -152,7 +152,7 @@ function M.toMediaSDP(content, opts)
 
     local hdrExts = desc.headerExtensions or {}
     for _, hdr in pairs(hdrExts) do
-        table.insert(sdp, "a=extmap:" .. hdr.id .. ((string.len(hdr.senders) > 0) and ("/" .. SENDERS[role][direction][hdr.senders]) or "") .. " " .. hdr.uri)
+        table.insert(sdp, "a=extmap:" .. hdr.id .. ((string.len(hdr.senders or "") > 0) and ("/" .. SENDERS[role][direction][hdr.senders]) or "") .. " " .. hdr.uri)
     end
 
     local ssrcGroups = desc.sourceGroups or {}
