@@ -134,7 +134,7 @@ function M.toMediaSDP(content, opts)
                 if fb.type == "trr-int" then
                     table.insert(sdp, "a=rtcp-fb:" .. payload.id .. " trr-int " .. (fb.value or "0"))
                 else
-                    table.insert(sdp, "a=rtcp-fb:" .. payload.id .. " " .. fb.type .. ((string.len(fb.subtype) > 0) and (" " .. fb.subtype) or ""))
+                    table.insert(sdp, "a=rtcp-fb:" .. payload.id .. " " .. fb.type .. ((string.len(fb.subtype or "") > 0) and (" " .. fb.subtype) or ""))
                 end
             end
         end
@@ -145,7 +145,7 @@ function M.toMediaSDP(content, opts)
             if fb.type == "trr-int" then
                 table.insert(sdp, "a=rtcp-fb:* trr-int " .. (fb.value or "0"))
             else
-                table.insert(sdp, "a=rtcp-fb:* " .. fb.type .. (fb.subtype and (" " .. fb.subtype) or ""))
+                table.insert(sdp, "a=rtcp-fb:* " .. fb.type .. ((string.len(fb.subtype or "") > 0) and (" " .. fb.subtype) or ""))
             end
         end
     end
