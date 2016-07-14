@@ -5,7 +5,7 @@ function M.printTable(T)
         if type(line) == "table" then
             M.printTable(line)
         else
-            print(line)
+            --print(line)
         end
     end
 end
